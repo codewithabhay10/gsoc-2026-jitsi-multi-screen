@@ -32,13 +32,14 @@ programmatically, and, as of the final PR, directly from the meeting UI so that 
 ordinary user on a laptop with a monitor can use the feature without writing any
 integration code.
 
-Five of my pull requests have been merged into `master`, totalling **+3,324 / -426
-lines** across 50 file changes. The last of them, the in-app triggers (#17666), was
-merged on 19 August after four rounds of review, which completes the feature itself.
-Two more are finished from my side and sit in the review queue, neither of them
-production code: WebdriverIO specs and a manual test checklist (#17715), and the
-handbook documentation for the whole External API surface (jitsi/handbook#683). The feature module on `master` is now **3,413 lines
-across 22 files**.
+Every pull request I opened for this project has been merged. Six went into
+`jitsi/jitsi-meet`, totalling **+3,691 / -426 lines** across 52 file changes, and one
+into `jitsi/handbook`, **+198 lines** across 3 files. The in-app triggers (#17666)
+merged on 19 August after four rounds of review, which completed the feature itself.
+The two supporting PRs, WebdriverIO specs and a manual test checklist (#17715) and
+the handbook documentation for the whole External API surface (jitsi/handbook#683),
+both merged on 24 August, the last day of the coding period. The feature module on
+`master` is now **3,413 lines across 22 files**.
 
 ---
 
@@ -126,9 +127,10 @@ dispatches, rather than taking a parallel path. This was a deliberate choice: it
 keeps one control plane, so an embedder observing the events sees in-app activity
 too, and there is only one code path to reason about when something goes wrong.
 
-**Rendering by React portal.** *(this project, #17547)* The second window's content is rendered by the main
-meeting's React tree, through a portal into the popup's document, with a per-window
-Emotion cache so styles are injected into the right document. This is what makes the
+**Rendering by React portal.** *(this project, #17547)* The second window's content
+is rendered by the main meeting's React tree, through a portal into the popup's
+document, with a per-window Emotion cache so styles are injected into the right
+document. This is what makes the
 second window a view rather than a second app: it shares the meeting's redux store,
 its media tracks, and its component code, and it costs no extra conference
 connection.
@@ -171,10 +173,11 @@ membership.
 | [#17598](https://github.com/jitsi/jitsi-meet/pull/17598) | Gate the whiteboard second screen on `isWhiteboardOpen` | 2026-07-09 | 1 file, +11/-4 |
 | [#17615](https://github.com/jitsi/jitsi-meet/pull/17615) | Shared video as a second-screen source | 2026-07-31 | 11 files, +657/-40 |
 | [#17666](https://github.com/jitsi/jitsi-meet/pull/17666) | In-app triggers for the second screen | 2026-08-19 | 17 files, +1228/-94 |
-| [#17715](https://github.com/jitsi/jitsi-meet/pull/17715) | iframe API specs and a manual test checklist | **open** | 2 files, +368/-0 |
-| [jitsi/handbook#683](https://github.com/jitsi/handbook/pull/683) | Document the second-screen API | **open** | 3 files, +198/-0 |
+| [#17715](https://github.com/jitsi/jitsi-meet/pull/17715) | iframe API specs and a manual test checklist | 2026-08-24 | 2 files, +367/-0 |
+| [jitsi/handbook#683](https://github.com/jitsi/handbook/pull/683) | Document the second-screen API | 2026-08-24 | 3 files, +198/-0 |
 
-**Merged total: 50 file changes, +3,324 / -426.**
+**Merged total: 52 file changes, +3,691 / -426 in `jitsi/jitsi-meet`, plus 3 files
+and +198 in `jitsi/handbook`. Nothing is left open.**
 
 One further PR, [#17562](https://github.com/jitsi/jitsi-meet/pull/17562) (stage and
 tile layouts), was closed unmerged on 2026-07-09 after review feedback; its content
@@ -269,7 +272,8 @@ The rest of the period went into the two things the feature was missing
 rather than into more feature: #17715 adds WebdriverIO specs for the External API
 paths plus a 44-case manual checklist for everything CI cannot reach, and
 jitsi/handbook#683 documents the command, the events, the error codes and the
-config option, none of which had any handbook coverage at all.
+config option, none of which had any handbook coverage at all. Both were approved on
+19 August and merged on 24 August.
 
 ---
 
@@ -398,19 +402,20 @@ answer to the same question, so the id stopped carrying one at all.
 
 ## Current state
 
-**The feature is complete and merged.** #17666, the last piece of implementation,
-went into `master` on 19 August as `ec0efb6b`, after four rounds of review. Every
-goal in the proposal is now on `master`, reachable both through the External API and
-from the meeting UI.
+**The project is complete and nothing is left open.** #17666, the last piece of
+implementation, went into `master` on 19 August as `ec0efb6b`, after four rounds of
+review. Every goal in the proposal is now on `master`, reachable both through the
+External API and from the meeting UI.
 
-Two PRs are finished from my side and sit in the review queue, neither of them
-production code:
+The two supporting PRs, neither of them production code, merged on 24 August and
+close the set:
 
-- **#17715**, the WebdriverIO specs and the manual checklist. Reviewed once, both
-  findings fixed, awaiting a second look.
-- **jitsi/handbook#683**, the External API documentation. Reviewed once, all four
-  findings fixed. It was deliberately held for #17666, because the page states the
-  contract as that branch leaves it, so the merge on 19 August unblocked it.
+- **#17715**, the WebdriverIO specs and the manual checklist, reviewed once with both
+  findings fixed, merged as `dac372de`.
+- **jitsi/handbook#683**, the External API documentation, reviewed once with all four
+  findings fixed, merged as `4732b2aa`. It was deliberately held for #17666, because
+  the page states the contract as that branch leaves it, so the merge on 19 August
+  unblocked it.
 
 All work passes the project gates: `tsc:web`, `tsc:native`, `eslint
 --max-warnings 0`, and `lint:lang`. The feature has been exercised by hand
@@ -419,11 +424,12 @@ how most of the behaviour described above was arrived at in the first place.
 
 One caveat I would rather state than leave implied: CI has never run on any of this.
 Fork PRs sit at `action_required` until a maintainer approves the workflow, and that
-did not happen, not across four rounds of review on #17666 and not on the merge
-commit, which still reports zero check runs. Every check on this work has therefore
-been a local gate run, a reviewer reading the code, or my own hands on two displays.
-The 44-case checklist in #17715 is there so the next person gets that coverage
-without having to rediscover what is worth checking.
+did not happen: not across four rounds of review on #17666, not on its merge commit,
+and not on #17715, the specs PR itself, which merged still reporting zero check runs.
+Every check on this work has therefore been a local gate run, a reviewer reading the
+code, or my own hands on two displays. The 44-case checklist in #17715 is there so
+the next person gets that coverage without having to rediscover what is worth
+checking.
 
 ---
 
@@ -451,8 +457,8 @@ changes behaviour until it opts in.
 - Feature module: [`react/features/multi-screen/`](https://github.com/jitsi/jitsi-meet/tree/master/react/features/multi-screen)
 - External API: [`modules/API/API.js`](https://github.com/jitsi/jitsi-meet/blob/master/modules/API/API.js), [`modules/API/external/external_api.js`](https://github.com/jitsi/jitsi-meet/blob/master/modules/API/external/external_api.js)
 - Config option: `secondScreen` in [`config.js`](https://github.com/jitsi/jitsi-meet/blob/master/config.js)
-- My PRs, merged: [#17547](https://github.com/jitsi/jitsi-meet/pull/17547), [#17581](https://github.com/jitsi/jitsi-meet/pull/17581), [#17598](https://github.com/jitsi/jitsi-meet/pull/17598), [#17615](https://github.com/jitsi/jitsi-meet/pull/17615), [#17666](https://github.com/jitsi/jitsi-meet/pull/17666) (in-app triggers)
-- My PRs, open: [#17715](https://github.com/jitsi/jitsi-meet/pull/17715) (tests and manual checklist), [jitsi/handbook#683](https://github.com/jitsi/handbook/pull/683) (documentation)
+- My PRs, all merged: [#17547](https://github.com/jitsi/jitsi-meet/pull/17547), [#17581](https://github.com/jitsi/jitsi-meet/pull/17581), [#17598](https://github.com/jitsi/jitsi-meet/pull/17598), [#17615](https://github.com/jitsi/jitsi-meet/pull/17615), [#17666](https://github.com/jitsi/jitsi-meet/pull/17666) (in-app triggers), [#17715](https://github.com/jitsi/jitsi-meet/pull/17715) (tests and manual checklist), [jitsi/handbook#683](https://github.com/jitsi/handbook/pull/683) (documentation)
+- The documentation, now live in the handbook: [`setSecondScreen`](https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe-commands#setsecondscreen), [`secondScreenSourceChanged`](https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe-events#secondscreensourcechanged), [`secondScreenClosed`](https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe-events#secondscreenclosed), [`secondScreenError`](https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe-events#secondscreenerror)
 - My PRs, closed: [#17562](https://github.com/jitsi/jitsi-meet/pull/17562), superseded during the pivot
 - The base this builds on, by Emil Ivov: [#17527](https://github.com/jitsi/jitsi-meet/pull/17527)
 - Pre-pivot prototype: [#17434](https://github.com/jitsi/jitsi-meet/pull/17434) (closed deliberately), fork PRs [#3](https://github.com/codewithabhay10/jitsi-meet/pull/3), [#4](https://github.com/codewithabhay10/jitsi-meet/pull/4), [#5](https://github.com/codewithabhay10/jitsi-meet/pull/5), [#6](https://github.com/codewithabhay10/jitsi-meet/pull/6)
@@ -464,5 +470,5 @@ changes behaviour until it opts in.
 Thank you to Cosmin Timis and Tudor Avram for the guidance and the reviews, which
 were consistently specific enough to be worth more than the code they were about. To
 Emil Ivov for the External API foundation this project builds on, and for the design
-decision that made the pivot the right call rather than a setback. And to Jaya Allamsetty and the Jitsi
-community.
+decision that made the pivot the right call rather than a setback. And to Jaya
+Allamsetty and the Jitsi community.
